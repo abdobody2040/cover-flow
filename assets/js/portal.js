@@ -446,6 +446,7 @@ const Portal = (() => {
     },
 
     toggleAuth(needsLogin) {
+      document.body.classList.toggle('is-auth', !needsLogin);
       document.getElementById('login').classList.toggle('active', needsLogin);
       document.querySelectorAll('main > .panel:not(#login)').forEach(p => p.classList.toggle('active', !needsLogin && p.id === 'tab-dashboard'));
     },

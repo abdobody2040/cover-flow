@@ -5,6 +5,14 @@
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
+/* Hide everything except the login until authenticated */
+.portal-shell:not(.is-auth) .sidebar,
+.portal-shell:not(.is-auth) .topbar {
+  display: none !important;
+}
+.portal-shell:not(.is-auth) main .panel { display: none !important; }
+.portal-shell:not(.is-auth) main #login { display: flex !important; }
+
 .portal-app {
   display: grid;
   grid-template-columns: 260px 1fr;

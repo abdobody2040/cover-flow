@@ -5,13 +5,13 @@
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
 
-/* Hide everything except the login until authenticated */
-.portal-shell:not(.is-auth) .sidebar,
-.portal-shell:not(.is-auth) .topbar {
+/* Hide everything except the login until authenticated (client portal only) */
+.client-portal:not(.is-auth) .sidebar,
+.client-portal:not(.is-auth) .topbar {
   display: none !important;
 }
-.portal-shell:not(.is-auth) main .panel { display: none !important; }
-.portal-shell:not(.is-auth) main #login { display: flex !important; }
+.client-portal:not(.is-auth) main .panel { display: none !important; }
+.client-portal:not(.is-auth) main #login { display: flex !important; }
 
 .portal-app {
   display: grid;

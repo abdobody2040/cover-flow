@@ -102,7 +102,8 @@ label { display:block; margin-bottom:6px; color:#b8bbf8; }
 
 .panel { display:none; }
 .panel.active { display:block; }
-.panel.centered { display:flex; align-items:center; justify-content:center; min-height: calc(100vh - 60px); }
+.panel.centered { display:none; align-items:center; justify-content:center; min-height: calc(100vh - 60px); }
+.panel.centered.active { display:flex; }
 
 .dialog::backdrop { background: rgba(0,0,0,.5); }
 .dialog .card { width:min(720px, 90vw); }

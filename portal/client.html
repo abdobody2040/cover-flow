@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Portal • IncorpX</title>
+  <link rel="stylesheet" href="../templatemo-3d-coverflow.css">
+  <link rel="stylesheet" href="../assets/css/portal.css">
+</head>
+<body class="portal-shell">
+  <div class="portal-app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo-mini">IX</div>
+        <div class="brand-text">Client</div>
+      </div>
+      <nav class="side-nav">
+        <button class="side-link active" data-tab="dashboard">Dashboard</button>
+        <button class="side-link" data-tab="payments">Payments</button>
+        <button class="side-link" data-tab="docs">Docs</button>
+        <button class="side-link" data-tab="support">Support</button>
+        <button class="side-link" data-tab="settings">Settings</button>
+      </nav>
+      <div class="side-footer">
+        <button id="btnLogout" class="side-link">Log out</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h1 id="greeting">Welcome</h1>
+        <div class="actions">
+          <button id="getHelp" class="secondary">Get help</button>
+        </div>
+      </header>
+
+      <!-- Dashboard -->
+      <section id="tab-dashboard" class="panel active">
+        <div class="grid-3">
+          <div class="card">
+            <div class="muted">Business Name</div>
+            <div id="infoBiz" class="kpi">—</div>
+          </div>
+          <div class="card">
+            <div class="muted">Business ID</div>
+            <div id="infoBizId" class="kpi">—</div>
+          </div>
+          <div class="card">
+            <div class="muted">Service status</div>
+            <div id="infoStatus" class="badge success">Active</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:16px;">
+          <div class="card">
+            <div class="card-title">Quick links</div>
+            <div class="stack">
+              <button class="link-row">Download free company logos</button>
+              <button class="link-row">Claim free US phone number</button>
+              <button class="link-row">Update company address</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Need help?</div>
+            <div class="stack">
+              <button class="link-row">Contact account manager</button>
+              <button class="link-row">Create a ticket</button>
+              <button class="link-row">Helpdesk articles</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Payments -->
+      <section id="tab-payments" class="panel">
+        <div class="card">
+          <div class="card-title">Payments</div>
+          <p class="muted">This demo does not process real payments. Add your gateway later.</p>
+          <div class="table-wrapper">
+            <table class="table" id="paymentsTable">
+              <thead>
+                <tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr>
+              </thead>
+              <tbody><!-- JS --></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Docs -->
+      <section id="tab-docs" class="panel">
+        <div class="card">
+          <div class="card-title">Documents</div>
+          <div class="table-wrapper">
+            <table class="table" id="docsTable">
+              <thead>
+                <tr><th>Type</th><th>Date</th><th>View</th></tr>
+              </thead>
+              <tbody><!-- JS --></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Support -->
+      <section id="tab-support" class="panel">
+        <div class="card">
+          <div class="card-title">Support</div>
+          <form id="ticketForm" class="stack">
+            <input id="ticketSubject" placeholder="Subject" required>
+            <textarea id="ticketBody" placeholder="How can we help?" rows="5" required></textarea>
+            <button class="primary" type="submit">Create ticket</button>
+          </form>
+          <div id="ticketStatus" class="muted" style="margin-top:10px;"></div>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section id="tab-settings" class="panel">
+        <div class="card">
+          <div class="card-title">Profile</div>
+          <form id="profileForm" class="grid">
+            <div>
+              <label>Full name</label>
+              <input id="pName" required>
+            </div>
+            <div>
+              <label>Email</label>
+              <input id="pEmail" type="email" required>
+            </div>
+            <div>
+              <label>Password</label>
+              <input id="pPass" type="password" required>
+            </div>
+            <div>
+              <button class="primary" type="submit">Save changes</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Login screen -->
+      <section id="login" class="panel centered">
+        <div class="login-box card">
+          <div class="card-title">Client login</div>
+          <form id="loginForm" class="stack">
+            <input id="loginEmail" placeholder="Email" type="email" required>
+            <input id="loginPass" placeholder="Password" type="password" required>
+            <button class="primary" type="submit">Sign in</button>
+          </form>
+          <p class="muted" style="margin-top:8px;">Use the credentials created by the admin.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../assets/js/portal.js"></script>
+  <script>
+    Portal.Client.init();
+  </script>
+</body>
+</html>

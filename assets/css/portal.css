@@ -1,0 +1,112 @@
+/* Minimal UI system to mirror modern SaaS dashboards */
+.portal-shell {
+  background: #0b0b12;
+  color: #e6e6f0;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+.portal-app {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #0f1020;
+  border-right: 1px solid rgba(255,255,255,.06);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.brand {
+  display:flex; align-items:center; gap:10px; padding: 6px 8px;
+}
+.logo-mini {
+  width:32px;height:32px;border-radius:10px;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;
+}
+.brand-text { font-weight:700; letter-spacing:.3px; }
+
+.side-nav { display:flex; flex-direction:column; gap:6px; }
+.side-link {
+  appearance:none; border:0; background:transparent; color:#cfd2ff;
+  padding:10px 12px; text-align:left; border-radius:10px; cursor:pointer;
+}
+.side-link:hover { background: rgba(255,255,255,.06); }
+.side-link.active { background: rgba(118,75,162,.18); color:#fff; }
+
+.side-footer { margin-top:auto; border-top:1px solid rgba(255,255,255,.06); padding-top:10px; }
+
+.content {
+  padding: 22px;
+}
+
+.topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom: 12px;
+}
+.topbar h1 { font-size: 22px; font-weight:700; }
+.actions { display:flex; gap:8px; }
+
+.primary, .secondary, .danger {
+  padding:10px 14px; border-radius:12px; border:1px solid transparent;
+  cursor:pointer; font-weight:600; color:#fff; background:#6d6de5;
+}
+.secondary { background:transparent; color:#cfd2ff; border-color:rgba(255,255,255,.12); }
+.danger { background:#c0392b; }
+
+.card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.25);
+}
+
+.card-title { font-weight:700; margin-bottom:12px; }
+
+.grid { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:12px; }
+.grid-2 { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:12px; }
+.grid-3 { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px; }
+
+.kpi { font-size: 20px; font-weight: 700; }
+.badge { display:inline-block; padding:6px 10px; border-radius: 999px; background:#30345a; }
+.badge.success { background:#27583e; }
+
+.table-wrapper { overflow: auto; }
+.table { width:100%; border-collapse: collapse; }
+.table th, .table td { text-align:left; padding:10px; border-bottom: 1px solid rgba(255,255,255,.07); }
+.table tr:hover { background: rgba(255,255,255,.03); }
+
+.stack { display:flex; flex-direction:column; gap:8px; }
+.link-row { background:transparent; border:1px solid rgba(255,255,255,.12); color:#e6e6f0; padding:10px 12px; border-radius:12px; text-align:left; cursor:pointer; }
+.link-row:hover { background: rgba(255,255,255,.06); }
+
+input, select, textarea {
+  width:100%; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+  color:#fff; border-radius:12px; padding:10px 12px; font:inherit;
+}
+label { display:block; margin-bottom:6px; color:#b8bbf8; }
+.muted { color:#b6b6c9; font-size: 13px; }
+
+.panel { display:none; }
+.panel.active { display:block; }
+.panel.centered { display:flex; align-items:center; justify-content:center; min-height: calc(100vh - 60px); }
+
+.dialog::backdrop { background: rgba(0,0,0,.5); }
+.dialog .card { width:min(720px, 90vw); }
+.dialog-actions { display:flex; justify-content:flex-end; gap:8px; padding-top:10px; }
+
+.login-box { width: min(380px, 92vw); }
+
+@media (max-width: 960px) {
+  .portal-app { grid-template-columns: 72px 1fr; }
+  .brand-text { display:none; }
+  .side-link { font-size: 0; }
+  .side-link::after { content: attr(data-icon); font-size: 16px; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+}

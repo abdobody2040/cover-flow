@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel • IncorpX</title>
+  <link rel="stylesheet" href="../templatemo-3d-coverflow.css">
+  <link rel="stylesheet" href="../assets/css/portal.css">
+</head>
+<body class="portal-shell">
+  <div class="portal-app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo-mini">IX</div>
+        <div class="brand-text">Admin</div>
+      </div>
+      <nav class="side-nav">
+        <button class="side-link active" data-panel="clients">Clients</button>
+        <button class="side-link" data-panel="documents">Documents</button>
+        <button class="side-link" data-panel="settings">Settings</button>
+      </nav>
+      <div class="side-footer">
+        <a class="side-link" href="../index.html">← Back to site</a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <h1>Admin Panel</h1>
+        <div class="actions">
+          <button id="btnCreate" class="primary">Create client</button>
+        </div>
+      </header>
+
+      <section id="panel-clients" class="panel active">
+        <div class="card">
+          <div class="card-title">All clients</div>
+          <div class="table-wrapper">
+            <table class="table" id="clientsTable">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Business</th>
+                  <th>Status</th>
+                  <th>Portal</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody><!-- populated by JS --></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="panel-documents" class="panel">
+        <div class="card">
+          <div class="card-title">Attach documents to a client</div>
+          <div class="grid">
+            <div>
+              <label for="docClient">Client</label>
+              <select id="docClient"></select>
+            </div>
+            <div>
+              <label for="docType">Type</label>
+              <input id="docType" placeholder="e.g. Articles of Organization">
+            </div>
+            <div>
+              <label for="docFile">File</label>
+              <input id="docFile" type="file">
+            </div>
+            <div>
+              <button id="btnAttach" class="primary">Upload document</button>
+            </div>
+          </div>
+          <div id="docStatus" class="muted" style="margin-top:10px;"></div>
+        </div>
+      </section>
+
+      <section id="panel-settings" class="panel">
+        <div class="card">
+          <div class="card-title">Panel settings</div>
+          <p class="muted">This demo stores data locally in your browser (localStorage). Integrate an API later for production.</p>
+          <button id="btnExport" class="secondary">Export data (JSON)</button>
+          <button id="btnImport" class="secondary">Import data (JSON)</button>
+          <input id="importFile" type="file" accept="application/json" style="display:none;">
+          <button id="btnWipe" class="danger">Wipe all demo data</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Dialogs -->
+  <dialog id="createDialog" class="dialog">
+    <form method="dialog" class="card">
+      <div class="card-title">Create client</div>
+      <div class="grid">
+        <div>
+          <label>Full name</label>
+          <input id="cName" required>
+        </div>
+        <div>
+          <label>Email</label>
+          <input id="cEmail" type="email" required>
+        </div>
+        <div>
+          <label>Business name</label>
+          <input id="cBiz" required>
+        </div>
+        <div>
+          <label>Password</label>
+          <input id="cPass" type="password" required>
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="cStatus">
+            <option value="Active">Active</option>
+            <option value="Pending">Pending</option>
+            <option value="On Hold">On Hold</option>
+          </select>
+        </div>
+      </div>
+      <menu class="dialog-actions">
+        <button value="cancel">Cancel</button>
+        <button id="createConfirm" class="primary" value="default">Create</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script src="../assets/js/portal.js"></script>
+  <script>
+    Portal.Admin.init();
+  </script>
+</body>
+</html>

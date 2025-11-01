@@ -278,13 +278,14 @@ const Portal = (() => {
 
         (clientsData || []).forEach(c => {
           const tr = document.createElement('tr');
+          tr.dataset.id = c.id;
           const url = new URL(location.origin + location.pathname.replace('admin.html','client.html'));
           url.searchParams.set('id', c.id);
 
           tr.innerHTML = `
-            <td>${c.name}</td>
-            <td>${c.email}</td>
-            <td>${c.business}</td>
+            <td class="can-edit" data-act="edit" data-id="${c.id}">${c.name}</td>
+            <td class="can-edit" data-act="edit" data-id="${c.id}">${c.email}</td>
+            <td class="can-edit" data-act="edit" data-id="${c.id}">${c.business}</td>
             <td>${c.status}</td>
             <td><a href="${url.toString()}" target="_blank">Open</a></td>
             <td>
@@ -296,41 +297,46 @@ const Portal = (() => {
           tbody.appendChild(tr);
         });
 
-        tbody.onclick = async (e) => {
-          const id = e.target.dataset.id;
-          const act = e.target.dataset.act;
-          if (!id || !act) return;
+        async function openEdit(id) {
+          const listNow = Api.available ? await Api.listClients() : list();
+          const c = (listNow || []).find(x => x.id === id);
+          if (!c) return;
+          document.getElementById('eId').value = c.id;
+          document.getElementById('eName').value = c.name || '';
+          document.getElementById('eEmail').value = c.email || '';
+          document.getElementById('eBiz').value = c.business || '';
+          document.getElementById('ePass').value = '';
+          document.getElementById('eStatus').value = c.status || 'Active';
+          document.getElementById('editDialog').showModal();
 
-          if (act === 'edit') {
-            // open edit dialog populated with current values
-            const listNow = Api.available ? await Api.listClients() : list();
-            const c = (listNow || []).find(x => x.id === id);
-            if (!c) return;
-            document.getElementById('eId').value = c.id;
-            document.getElementById('eName').value = c.name || '';
-            document.getElementById('eEmail').value = c.email || '';
-            document.getElementById('eBiz').value = c.business || '';
-            document.getElementById('ePass').value = '';
-            document.getElementById('eStatus').value = c.status || 'Active';
-            document.getElementById('editDialog').showModal();
-
-            document.getElementById('editConfirm').onclick = async (ev) => {
-              ev.preventDefault();
-              const patch = {
-                name: document.getElementById('eName').value.trim(),
-                email: document.getElementById('eEmail').value.trim(),
-                business: document.getElementById('eBiz').value.trim(),
-                status: document.getElementById('eStatus').value
-              };
-              const newPass = document.getElementById('ePass').value;
-              if (newPass) patch.password = newPass;
-
-              if (Api.available) await Api.updateClient(id, patch);
-              else update(id, { name: patch.name, email: patch.email, business: patch.business, status: patch.status, ...(newPass ? { pass: newPass } : {}) });
-
-              document.getElementById('editDialog').close();
-              this.refresh();
+          document.getElementById('editConfirm').onclick = async (ev) => {
+            ev.preventDefault();
+            const patch = {
+              name: document.getElementById('eName').value.trim(),
+              email: document.getElementById('eEmail').value.trim(),
+              business: document.getElementById('eBiz').value.trim(),
+              status: document.getElementById('eStatus').value
             };
+            const newPass = document.getElementById('ePass').value;
+            if (newPass) patch.password = newPass;
+
+            if (Api.available) await Api.updateClient(id, patch);
+            else update(id, { name: patch.name, email: patch.email, business: patch.business, status: patch.status, ...(newPass ? { pass: newPass } : {}) });
+
+            document.getElementById('editDialog').close();
+            Admin.refresh();
+          };
+        }
+
+        // Click handlers (buttons and editable cells)
+        tbody.onclick = async (e) => {
+          const id = e.target.dataset.id || e.target.closest('tr')?.dataset?.id;
+          const act = e.target.dataset.act;
+          if (!id) return;
+
+          if (act === 'edit' || e.target.classList.contains('can-edit')) {
+            await openEdit(id);
+            return;
           }
 
           if (act === 'status') {

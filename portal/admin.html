@@ -127,6 +127,44 @@
     </form>
   </dialog>
 
+  <!-- Edit Dialog -->
+  <dialog id="editDialog" class="dialog">
+    <form method="dialog" class="card">
+      <div class="card-title">Edit client</div>
+      <input type="hidden" id="eId">
+      <div class="grid">
+        <div>
+          <label>Full name</label>
+          <input id="eName" required>
+        </div>
+        <div>
+          <label>Email</label>
+          <input id="eEmail" type="email" required>
+        </div>
+        <div>
+          <label>Business name</label>
+          <input id="eBiz" required>
+        </div>
+        <div>
+          <label>New password (optional)</label>
+          <input id="ePass" type="password" placeholder="Leave blank to keep current">
+        </div>
+        <div>
+          <label>Status</label>
+          <select id="eStatus">
+            <option value="Active">Active</option>
+            <option value="Pending">Pending</option>
+            <option value="On Hold">On Hold</option>
+          </select>
+        </div>
+      </div>
+      <menu class="dialog-actions">
+        <button value="cancel">Cancel</button>
+        <button id="editConfirm" class="primary" value="default">Save</button>
+      </menu>
+    </form>
+  </dialog>
+
   <script src="../assets/js/portal.js"></script>
   <script>
     Portal.Admin.init();

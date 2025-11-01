@@ -261,48 +261,107 @@ const Portal = (() => {
     async refresh() {
       const tbody = document.querySelector('#clientsTable tbody');
       tbody.innerHTML = '';
-      const clients = Api.available ? await Api.listClients() : list();
+      const clients = Api.available ? [] : list();
 
-      // doc client select
-      const sel = document.getElementById('docClient');
-      sel.innerHTML = '';
-      (clients || []).forEach(c => {
-        sel.appendChild(new Option(`${c.name} • ${c.business}`, c.id));
+      // If server mode, fetch clients via API
+      const loadClients = async () => {
+        return Api.available ? await Api.listClients() : list();
+      };
+
+      loadClients().then((clientsData) => {
+        // doc client select
+        const sel = document.getElementById('docClient');
+        sel.innerHTML = '';
+        (clientsData || []).forEach(c => {
+          sel.appendChild(new Option(`${c.name} • ${c.business}`, c.id));
+        });
+
+        (clientsData || []).forEach(c => {
+          const tr = document.createElement('tr');
+          const url = new URL(location.origin + location.pathname.replace('admin.html','client.html'));
+          url.searchParams.set('id', c.id);
+
+          tr.innerHTML = `
+            <td>${c.name}</td>
+            <td>${c.email}</td>
+            <td>${c.business}</td>
+            <td>${c.status}</td>
+            <td><a href="${url.toString()}" target="_blank">Open</a></td>
+            <td>
+              <button data-act="edit" data-id="${c.id}" class="secondary">Edit</button>
+              <button data-act="status" data-id="${c.id}" class="secondary">Toggle</button>
+              <button data-act="reset" data-id="${c.id}" class="secondary">Reset password</button>
+              <button data-act="del" data-id="${c.id}" class="danger">Delete</button>
+            </td>`;
+          tbody.appendChild(tr);
+        });
+
+        tbody.onclick = async (e) => {
+          const id = e.target.dataset.id;
+          const act = e.target.dataset.act;
+          if (!id || !act) return;
+
+          if (act === 'edit') {
+            // open edit dialog populated with current values
+            const listNow = Api.available ? await Api.listClients() : list();
+            const c = (listNow || []).find(x => x.id === id);
+            if (!c) return;
+            document.getElementById('eId').value = c.id;
+            document.getElementById('eName').value = c.name || '';
+            document.getElementById('eEmail').value = c.email || '';
+            document.getElementById('eBiz').value = c.business || '';
+            document.getElementById('ePass').value = '';
+            document.getElementById('eStatus').value = c.status || 'Active';
+            document.getElementById('editDialog').showModal();
+
+            document.getElementById('editConfirm').onclick = async (ev) => {
+              ev.preventDefault();
+              const patch = {
+                name: document.getElementById('eName').value.trim(),
+                email: document.getElementById('eEmail').value.trim(),
+                business: document.getElementById('eBiz').value.trim(),
+                status: document.getElementById('eStatus').value
+              };
+              const newPass = document.getElementById('ePass').value;
+              if (newPass) patch.password = newPass;
+
+              if (Api.available) await Api.updateClient(id, patch);
+              else update(id, { name: patch.name, email: patch.email, business: patch.business, status: patch.status, ...(newPass ? { pass: newPass } : {}) });
+
+              document.getElementById('editDialog').close();
+              this.refresh();
+            };
+          }
+
+          if (act === 'status') {
+            if (Api.available) {
+              const all = await Api.listClients();
+              const c = (all || []).find(x=>x.id===id);
+              const next = c && c.status === 'Active' ? 'On Hold' : 'Active';
+              await Api.updateClient(id, { status: next });
+            } else {
+              const c = findById(id);
+              const next = c.status === 'Active' ? 'On Hold' : 'Active';
+              update(id, { status: next });
+            }
+            this.refresh();
+          } else if (act === 'reset') {
+            const pass = prompt('New password for user:');
+            if (pass) {
+              if (Api.available) await Api.updateClient(id, { password: pass });
+              else update(id, { pass });
+              alert('Password updated.');
+            }
+          } else if (act === 'del') {
+            if (confirm('Delete this client?')) {
+              if (Api.available) await Api.deleteClient(id);
+              else remove(id);
+              this.refresh();
+            }
+          }
+        };
       });
-
-      (clients || []).forEach(c => {
-        const tr = document.createElement('tr');
-        const url = new URL(location.origin + location.pathname.replace('admin.html','client.html'));
-        url.searchParams.set('id', c.id);
-
-        tr.innerHTML = `
-          <td>${c.name}</td>
-          <td>${c.email}</td>
-          <td>${c.business}</td>
-          <td>${c.status}</td>
-          <td><a href="${url.toString()}" target="_blank">Open</a></td>
-          <td>
-            <button data-act="status" data-id="${c.id}" class="secondary">Toggle</button>
-            <button data-act="reset" data-id="${c.id}" class="secondary">Reset password</button>
-            <button data-act="del" data-id="${c.id}" class="danger">Delete</button>
-          </td>`;
-        tbody.appendChild(tr);
-      });
-
-      tbody.onclick = async (e) => {
-        const id = e.target.dataset.id;
-        const act = e.target.dataset.act;
-        if (!id || !act) return;
-        if (act === 'status') {
-          if (Api.available) {
-            const all = Api.available ? await Api.listClients() : list();
-            const c = (all || []).find(x=>x.id===id);
-            const next = c && c.status === 'Active' ? 'On Hold' : 'Active';
-            await Api.updateClient(id, { status: next });
-          } else {
-            const c = findById(id);
-            const next = c.status === 'Active' ? 'On Hold' : 'Active';
-            update(id, { status: next });
+    });
           }
           this.refresh();
         } else if (act === 'reset') {
